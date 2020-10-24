@@ -24,6 +24,7 @@ includes =
   ctime: require("./includes/ctime")
   iomanip: require("./includes/iomanip")
   foo: require("./includes/dummy_class_foo")
+  indi9: require("./includes/indi9")
 
 headerAlias =
   "ctype.h": "cctype"
