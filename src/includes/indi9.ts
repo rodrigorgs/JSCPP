@@ -47,9 +47,13 @@ export = {
             const imageValue = rt.getStringFromCharArray(image)
             console.log("drawImage", imageValue, x.v, y.v)
             const imageElem = document.getElementById(imageValue) as CanvasImageSource;
-            ctx.beginPath()
-            ctx.drawImage(imageElem, x.v, y.v);
-            ctx.fill()
+            if (imageElem) {
+                ctx.beginPath()
+                ctx.drawImage(imageElem, x.v, y.v);
+                ctx.fill()
+            } else {
+                console.error(`Image "${imageValue}" not found.`);
+            }
         }
         rt.regFunc(_drawImage, "global", "drawImage", [rt.normalPointerType(rt.charTypeLiteral), rt.doubleTypeLiteral, rt.doubleTypeLiteral], rt.voidTypeLiteral)
 
