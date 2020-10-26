@@ -19,6 +19,31 @@ export = {
             ctx.fill()
         }
         rt.regFunc(_fillRect, "global", "fillRect", [rt.doubleTypeLiteral, rt.doubleTypeLiteral, rt.doubleTypeLiteral, rt.doubleTypeLiteral, rt.normalPointerType(rt.charTypeLiteral)], rt.voidTypeLiteral)
+
+        const _drawRect = function (rt: CRuntime, _this: Variable, x: FloatVariable, y: FloatVariable, w: FloatVariable, h: FloatVariable, color: ArrayVariable) {
+            const colorValue = rt.getStringFromCharArray(color)
+            console.log("drawRect: ", x.v, y.v, w.v, h.v, colorValue);
+            ctx.lineWidth = 1
+            ctx.strokeStyle = colorValue
+            ctx.beginPath()
+            ctx.rect(x.v, y.v, w.v, h.v)
+            ctx.stroke()
+        }
+        rt.regFunc(_drawRect, "global", "drawRect", [rt.doubleTypeLiteral, rt.doubleTypeLiteral, rt.doubleTypeLiteral, rt.doubleTypeLiteral, rt.normalPointerType(rt.charTypeLiteral)], rt.voidTypeLiteral)
+
+        const _drawLine = function (rt: CRuntime, _this: Variable, x: FloatVariable, y: FloatVariable, w: FloatVariable, h: FloatVariable, color: ArrayVariable) {
+            const colorValue = rt.getStringFromCharArray(color)
+            console.log("drawLine: ", x.v, y.v, w.v, h.v, colorValue);
+            ctx.lineWidth = 1
+            ctx.strokeStyle = colorValue
+            ctx.beginPath()
+            ctx.moveTo(x.v, y.v)
+            ctx.lineTo(w.v, h.v)
+            ctx.stroke()
+        }
+        rt.regFunc(_drawLine, "global", "drawLine", [rt.doubleTypeLiteral, rt.doubleTypeLiteral, rt.doubleTypeLiteral, rt.doubleTypeLiteral, rt.normalPointerType(rt.charTypeLiteral)], rt.voidTypeLiteral)
+
+
     }
 };
 
