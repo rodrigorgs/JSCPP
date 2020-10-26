@@ -53,6 +53,17 @@ export = {
         }
         rt.regFunc(_drawImage, "global", "drawImage", [rt.normalPointerType(rt.charTypeLiteral), rt.doubleTypeLiteral, rt.doubleTypeLiteral], rt.voidTypeLiteral)
 
+        const _drawText = function (rt: CRuntime, _this: Variable, text: ArrayVariable, x: FloatVariable, y: FloatVariable, size: FloatVariable, color: ArrayVariable) {
+            const textValue = rt.getStringFromCharArray(text)
+            const colorValue = rt.getStringFromCharArray(color)
+            console.log("drawText", textValue, x.v, y.v, size.v, colorValue)
+            
+            ctx.fillStyle = colorValue
+            ctx.font = "" + size.v + "px Arial"
+            ctx.fillText(textValue, x.v, y.v)
+        }
+        rt.regFunc(_drawText, "global", "drawText", [rt.normalPointerType(rt.charTypeLiteral), rt.doubleTypeLiteral, rt.doubleTypeLiteral, rt.doubleTypeLiteral, rt.normalPointerType(rt.charTypeLiteral)], rt.voidTypeLiteral)
+
     }
 };
 
