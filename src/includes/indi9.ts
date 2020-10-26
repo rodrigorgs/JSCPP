@@ -68,6 +68,21 @@ export = {
         }
         rt.regFunc(_drawText, "global", "drawText", [rt.normalPointerType(rt.charTypeLiteral), rt.doubleTypeLiteral, rt.doubleTypeLiteral, rt.doubleTypeLiteral, rt.normalPointerType(rt.charTypeLiteral)], rt.voidTypeLiteral)
 
+        const _loadImage = function (rt: CRuntime, _this: Variable, id: ArrayVariable, url: ArrayVariable) {
+            const idValue = rt.getStringFromCharArray(id)
+            const urlValue = rt.getStringFromCharArray(url)
+            console.log("loadImage", idValue, urlValue)
+            if (document.getElementById(idValue)) {
+                console.error(`Id "${idValue}" already exists on page.`)
+            } else {
+                var elem = document.createElement("img") as HTMLImageElement
+                elem.src = urlValue
+                elem.setAttribute("style", "display: none")
+                document.body.appendChild(elem)
+            }
+        }
+        rt.regFunc(_loadImage, "global", "loadImage", [rt.normalPointerType(rt.charTypeLiteral), rt.normalPointerType(rt.charTypeLiteral)], rt.voidTypeLiteral)
+
     }
 };
 
