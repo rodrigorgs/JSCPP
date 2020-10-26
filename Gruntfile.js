@@ -74,7 +74,7 @@ module.exports = function (grunt) {
     ts: {
       default: {
         src: ["src/**/*.ts"],
-        tsconfig: './tsconfig.json',
+        tsconfig: './tsconfig.json'
       }
     },
 
