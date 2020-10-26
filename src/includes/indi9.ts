@@ -43,6 +43,15 @@ export = {
         }
         rt.regFunc(_drawLine, "global", "drawLine", [rt.doubleTypeLiteral, rt.doubleTypeLiteral, rt.doubleTypeLiteral, rt.doubleTypeLiteral, rt.normalPointerType(rt.charTypeLiteral)], rt.voidTypeLiteral)
 
+        const _drawImage = function (rt: CRuntime, _this: Variable, image: ArrayVariable, x: FloatVariable, y: FloatVariable) {
+            const imageValue = rt.getStringFromCharArray(image)
+            console.log("drawImage", imageValue, x.v, y.v)
+            const imageElem = document.getElementById(imageValue) as CanvasImageSource;
+            ctx.beginPath()
+            ctx.drawImage(imageElem, x.v, y.v);
+            ctx.fill()
+        }
+        rt.regFunc(_drawImage, "global", "drawImage", [rt.normalPointerType(rt.charTypeLiteral), rt.doubleTypeLiteral, rt.doubleTypeLiteral], rt.voidTypeLiteral)
 
     }
 };

@@ -5,11 +5,13 @@
 </head>
 
 <body>
+  <img id="testImage" src="https://picsum.photos/120" style="display: none;"></img>
   <canvas id="gamecanvas" width="640" height="360" style="background: black;"></canvas>
   <p/>
 </body>
 <script src="../dist/JSCPP.js"></script>
 <script type="text/javascript">
+window.onload = function () {
   var code = "#include <iostream>"+
             "#include <indi9>"+
              "using namespace std;"+
@@ -17,6 +19,7 @@
              '    fillRect(0, 0, 160, 90, "red");'+
              '    drawRect(100, 100, 260, 190, "blue");'+
              '    drawLine(0, 0, 100, 100, "yellow");'+
+             '    drawImage("testImage", 200, 200);'+
              "    return 0;"+
              "}"
   ;
@@ -31,5 +34,6 @@
   };
   var exitCode = JSCPP.run(code, input, config);
   console.log(output + "\nprogram exited with code " + exitCode);
+}
 </script>
 </html>
