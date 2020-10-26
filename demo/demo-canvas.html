@@ -8,15 +8,13 @@
   <canvas id="gamecanvas" width="640" height="360" style="background: black;"></canvas>
   <p/>
 </body>
-<script src="../dist/JSCPP.es5.min.js"></script>
+<script src="../dist/JSCPP.js"></script>
 <script type="text/javascript">
   var code = "#include <iostream>"+
             "#include <indi9>"+
              "using namespace std;"+
              "int main() {"+
-             "    int a;"+
-             "    cin >> a;"+
-             "    cout << a << endl;"+
+             '    fillRect(0, 0, 160, 90, "red");'+
              "    return 0;"+
              "}"
   ;
