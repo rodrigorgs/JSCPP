@@ -11,10 +11,21 @@ export = {
             promises: [] as Promise<unknown>[]
         };
 
+        const keyState = {} as {[index: string]: boolean};
+        window.addEventListener("keyup", (e: KeyboardEvent) => { keyState[e.key] = false; });
+        window.addEventListener("keydown", (e: KeyboardEvent) => { console.log(e.key); keyState[e.key] = true; });
+
         const _alo = function(rt: CRuntime, _this: Variable) {
             window.alert("Alo mundo");
         }
         rt.regFunc(_alo, "global", "alo", [], rt.voidTypeLiteral);
+
+        const _isKeyDown = function(rt: CRuntime, _this: Variable, key: ArrayVariable) {
+            const keyValue = rt.getStringFromCharArray(key);
+            const ret = keyState[keyValue] ? true : false;
+            return rt.val(rt.boolTypeLiteral, ret);
+        }
+        rt.regFunc(_isKeyDown, "global", "isKeyDown", [rt.normalPointerType(rt.charTypeLiteral)], rt.boolTypeLiteral);
 
         const _fillRect = function (rt: CRuntime, _this: Variable, x: FloatVariable, y: FloatVariable, w: FloatVariable, h: FloatVariable, color: ArrayVariable) {
             const colorValue = rt.getStringFromCharArray(color)

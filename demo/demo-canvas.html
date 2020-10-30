@@ -11,26 +11,38 @@
 <script src="../dist/JSCPP.js"></script>
 <script type="text/javascript">
 window.onload = function () {
-  var code = "#include <iostream>"+
-            "#include <indi9>"+
-             "using namespace std;"+
-             "int main() {"+
-             '    fillRect(0, 0, 160, 90, "red");'+
-             '    drawRect(100, 100, 260, 190, "blue");'+
-             '    drawLine(0, 0, 100, 100, "yellow");'+
-             '    drawText("Hello World", 8, 30, 22, "white");'+
-             '    loadImage("panda", "https://upload.wikimedia.org/wikipedia/commons/b/bf/Farm-Fresh_emotion_face_panda.png");'+
-             '    loadImage("hero", "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Cc-by_new_white.svg/48px-Cc-by_new_white.svg.png");'+
-             '    waitUntilResourcesLoad();'+
-             '    drawImage("panda", 110, 110);'+
-             '    drawImage("hero", 150, 120);'+
-             '    loadImage("block", "https://upload.wikimedia.org/wikipedia/commons/d/d1/3D_icon_32x32.png");'+
-             '    waitUntilResourcesLoad();'+
-             '    drawImage("block", 180, 120);'+
-             "    return 0;"+
-             "}"
-  ;
+  var code = `
+#include <iostream>
+#include <cmath>
+#include <indi9>
+using namespace std;
 
+int main() {
+  fillRect(0, 0, 160, 90, "red");
+  drawRect(100, 100, 260, 190, "blue");
+  drawLine(0, 0, 100, 100, "yellow");
+  drawText("Hello World", 8, 30, 22, "white");
+  loadImage("panda", "https://upload.wikimedia.org/wikipedia/commons/b/bf/Farm-Fresh_emotion_face_panda.png");
+  loadImage("hero", "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Cc-by_new_white.svg/48px-Cc-by_new_white.svg.png");
+  waitUntilResourcesLoad();
+  drawImage("panda", 110, 110);
+  drawImage("hero", 150, 120);
+  loadImage("block", "https://upload.wikimedia.org/wikipedia/commons/3/3d/8X8_GEOLOC.png");
+  waitUntilResourcesLoad();
+  cout << "loaded all images" << endl;
+
+  double x = 180, y = 120, delta = 2;
+  for (;;) {
+    if (isKeyDown("ArrowLeft")) x -= delta;
+    if (isKeyDown("ArrowRight")) x += delta;
+    if (isKeyDown("ArrowUp")) y -= delta;
+    if (isKeyDown("ArrowDown")) y += delta;
+    drawImage("block", x, y);
+    delay(30);
+  }
+  
+  return 0;
+}`
   
   async function run(config) {
     config = config || {};
