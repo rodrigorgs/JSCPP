@@ -13,7 +13,7 @@ export = {
 
         const keyState = {} as {[index: string]: boolean};
         window.addEventListener("keyup", (e: KeyboardEvent) => { keyState[e.key] = false; });
-        window.addEventListener("keydown", (e: KeyboardEvent) => { console.log(e.key); keyState[e.key] = true; });
+        window.addEventListener("keydown", (e: KeyboardEvent) => { keyState[e.key] = true; });
 
         const _alo = function(rt: CRuntime, _this: Variable) {
             window.alert("Alo mundo");
@@ -29,7 +29,6 @@ export = {
 
         const _fillRect = function (rt: CRuntime, _this: Variable, x: FloatVariable, y: FloatVariable, w: FloatVariable, h: FloatVariable, color: ArrayVariable) {
             const colorValue = rt.getStringFromCharArray(color)
-            console.log("fillRect: ", x.v, y.v, w.v, h.v, colorValue);
             ctx.fillStyle = colorValue
             ctx.beginPath()
             ctx.rect(x.v, y.v, w.v, h.v)
@@ -39,7 +38,6 @@ export = {
 
         const _drawRect = function (rt: CRuntime, _this: Variable, x: FloatVariable, y: FloatVariable, w: FloatVariable, h: FloatVariable, color: ArrayVariable) {
             const colorValue = rt.getStringFromCharArray(color)
-            console.log("drawRect: ", x.v, y.v, w.v, h.v, colorValue);
             ctx.lineWidth = 1
             ctx.strokeStyle = colorValue
             ctx.beginPath()
@@ -50,7 +48,6 @@ export = {
 
         const _drawLine = function (rt: CRuntime, _this: Variable, x: FloatVariable, y: FloatVariable, w: FloatVariable, h: FloatVariable, color: ArrayVariable) {
             const colorValue = rt.getStringFromCharArray(color)
-            console.log("drawLine: ", x.v, y.v, w.v, h.v, colorValue);
             ctx.lineWidth = 1
             ctx.strokeStyle = colorValue
             ctx.beginPath()
@@ -62,7 +59,6 @@ export = {
 
         const _drawImage = function (rt: CRuntime, _this: Variable, image: ArrayVariable, x: FloatVariable, y: FloatVariable) {
             const imageValue = rt.getStringFromCharArray(image)
-            console.log("drawImage", imageValue, x.v, y.v)
             const imageElem = document.getElementById(imageValue) as CanvasImageSource;
             if (imageElem) {
                 ctx.beginPath()
@@ -77,7 +73,6 @@ export = {
         const _drawText = function (rt: CRuntime, _this: Variable, text: ArrayVariable, x: FloatVariable, y: FloatVariable, size: FloatVariable, color: ArrayVariable) {
             const textValue = rt.getStringFromCharArray(text)
             const colorValue = rt.getStringFromCharArray(color)
-            console.log("drawText", textValue, x.v, y.v, size.v, colorValue)
             
             ctx.fillStyle = colorValue
             ctx.font = "" + size.v + "px Arial"
@@ -93,7 +88,6 @@ export = {
         const _loadImage = function (rt: CRuntime, _this: Variable, id: ArrayVariable, url: ArrayVariable) {
             const idValue = rt.getStringFromCharArray(id)
             const urlValue = rt.getStringFromCharArray(url)
-            console.log("loadImage", idValue, urlValue)
             if (document.getElementById(idValue)) {
                 console.error(`Id "${idValue}" already exists on page.`)
             } else {
@@ -108,7 +102,6 @@ export = {
                     new Promise((resolve, reject) => {
                         elem.onload = function () {
                             resourceRegistry.loadedResources++;
-                            console.log("total: ", resourceRegistry.totalResources, " loaded: ", resourceRegistry.loadedResources);
                             resolve();
                         };
                     })
