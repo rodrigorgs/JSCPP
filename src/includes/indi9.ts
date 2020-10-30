@@ -28,6 +28,25 @@ export = {
         }
         rt.regFunc(_readKey, "global", "readKey", [], rt.voidTypeLiteral);
 
+        const _canvasWidth = function(rt: CRuntime, _this: Variable) {
+            return rt.val(rt.doubleTypeLiteral, canvas.width);
+        }
+        rt.regFunc(_canvasWidth, "global", "canvasWidth", [], rt.doubleTypeLiteral);
+
+        const _canvasHeight = function(rt: CRuntime, _this: Variable) {
+            return rt.val(rt.doubleTypeLiteral, canvas.height);
+        }
+        rt.regFunc(_canvasHeight, "global", "canvasHeight", [], rt.doubleTypeLiteral);
+
+        const _clear = function(rt: CRuntime, _this: Variable, color: ArrayVariable) {
+            const colorValue = rt.getStringFromCharArray(color)
+            ctx.fillStyle = colorValue
+            ctx.beginPath()
+            ctx.rect(0, 0, canvas.width, canvas.height)
+            ctx.fill()
+        }
+        rt.regFunc(_clear, "global", "clear", [rt.normalPointerType(rt.charTypeLiteral)], rt.voidTypeLiteral); 
+
         const _isKeyDown = function(rt: CRuntime, _this: Variable, key: ArrayVariable) {
             const keyValue = rt.getStringFromCharArray(key);
             const ret = keyState[keyValue] ? true : false;

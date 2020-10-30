@@ -18,28 +18,29 @@ window.onload = function () {
 using namespace std;
 
 int main() {
-  drawText("Press any key to continue", 8, 30, 22, "white");
-  readKey();
+  cout << canvasWidth() << "x" << canvasHeight() << endl;
   fillRect(0, 0, 400, 90, "red");
   drawRect(100, 100, 260, 190, "blue");
   drawLine(0, 0, 100, 100, "yellow");
-  drawText("Hello World", 8, 30, 22, "white");
+  drawText("Press any key to continue", 8, 30, 22, "white");
+  readKey();
   loadImage("panda", "https://upload.wikimedia.org/wikipedia/commons/b/bf/Farm-Fresh_emotion_face_panda.png");
   loadImage("hero", "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Cc-by_new_white.svg/48px-Cc-by_new_white.svg.png");
-  waitUntilResourcesLoad();
-  drawImage("panda", 110, 110);
-  drawImage("hero", 150, 120);
   loadImage("block", "https://upload.wikimedia.org/wikipedia/commons/3/3d/8X8_GEOLOC.png");
   waitUntilResourcesLoad();
   cout << "loaded all images" << endl;
 
-  double x = 180, y = 120, delta = 2;
+  double x = 180, y = 120, delta = 4;
   for (;;) {
+    clear("black");
     if (isKeyDown("ArrowLeft")) x -= delta;
     if (isKeyDown("ArrowRight")) x += delta;
     if (isKeyDown("ArrowUp")) y -= delta;
     if (isKeyDown("ArrowDown")) y += delta;
-    drawImage("block", x, y);
+    
+    drawImage("hero", 400, 200);
+    drawImage("block", 400, 200);
+    drawImage("panda", x, y);
     delay(30);
   }
   
