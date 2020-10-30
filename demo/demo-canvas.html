@@ -24,6 +24,9 @@ int main() {
   drawLine(0, 0, 100, 100, "yellow");
   drawText("Press any key to continue", 8, 30, 22, "white");
   readKey();
+  clear("black");
+  drawText(lastKey(), 8, 30, 22, "white");
+  
   loadImage("panda", "https://upload.wikimedia.org/wikipedia/commons/b/bf/Farm-Fresh_emotion_face_panda.png");
   loadImage("hero", "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Cc-by_new_white.svg/48px-Cc-by_new_white.svg.png");
   loadImage("block", "https://upload.wikimedia.org/wikipedia/commons/3/3d/8X8_GEOLOC.png");
@@ -37,7 +40,8 @@ int main() {
     if (isKeyDown("ArrowRight")) x += delta;
     if (isKeyDown("ArrowUp")) y -= delta;
     if (isKeyDown("ArrowDown")) y += delta;
-    
+  
+    drawText(lastKey(), 8, 30, 22, "white");
     drawImage("hero", 400, 200);
     drawImage("block", 400, 200);
     drawImage("panda", x, y);

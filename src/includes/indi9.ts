@@ -15,18 +15,28 @@ export = {
         window.addEventListener("keyup", (e: KeyboardEvent) => { keyState[e.key] = false; });
         window.addEventListener("keydown", (e: KeyboardEvent) => { keyState[e.key] = true; });
 
+        let lastKeyPressed: string = undefined;
+
         const _alo = function(rt: CRuntime, _this: Variable) {
             window.alert("Alo mundo");
         }
         rt.regFunc(_alo, "global", "alo", [], rt.voidTypeLiteral);
 
-        // TODO: how to return the key pressed (string)?
         const _readKey = function(rt: CRuntime, _this: Variable) {
             (<any>window).debuggerPromise = new Promise((resolve, reject) => {
-                window.addEventListener("keypress", (e) => resolve());
+                window.addEventListener("keydown", (e: KeyboardEvent) => {
+                    lastKeyPressed = e.key;
+                    window.removeEventListener("keydown", this);
+                    resolve()
+                }, {once: true});
             })
         }
         rt.regFunc(_readKey, "global", "readKey", [], rt.voidTypeLiteral);
+
+        const _lastKey = function(rt: CRuntime, _this: Variable) {
+            return rt.makeCharArrayFromString(lastKeyPressed);
+        }
+        rt.regFunc(_lastKey, "global", "lastKey", [], rt.normalPointerType(rt.charTypeLiteral));
 
         const _canvasWidth = function(rt: CRuntime, _this: Variable) {
             return rt.val(rt.doubleTypeLiteral, canvas.width);
