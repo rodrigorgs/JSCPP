@@ -5,7 +5,6 @@
 </head>
 
 <body>
-  <img id="testImage" src="https://picsum.photos/120" style="display: none;"></img>
   <canvas id="gamecanvas" width="640" height="360" style="background: black;"></canvas>
   <p/>
 </body>
@@ -19,11 +18,12 @@ window.onload = function () {
              '    fillRect(0, 0, 160, 90, "red");'+
              '    drawRect(100, 100, 260, 190, "blue");'+
              '    drawLine(0, 0, 100, 100, "yellow");'+
-             '    drawImage("testImage", 200, 200);'+
              '    drawText("Hello World", 8, 30, 22, "white");'+
-             '    loadImage("indigente", "http://indigente.github.io/images/logo-indigente.png");'+
-             '    delay(1000);'+
-             '    drawImage("indigente", 0, 0);'+
+             '    loadImage("panda", "https://upload.wikimedia.org/wikipedia/commons/b/bf/Farm-Fresh_emotion_face_panda.png");'+
+             '    loadImage("hero", "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Cc-by_new_white.svg/48px-Cc-by_new_white.svg.png");'+
+             '    delay(500);'+
+             '    drawImage("panda", 110, 110);'+
+             '    drawImage("hero", 150, 120);'+
              "    return 0;"+
              "}"
   ;
