@@ -18,7 +18,9 @@ window.onload = function () {
 using namespace std;
 
 int main() {
-  fillRect(0, 0, 160, 90, "red");
+  drawText("Press any key to continue", 8, 30, 22, "white");
+  readKey();
+  fillRect(0, 0, 400, 90, "red");
   drawRect(100, 100, 260, 190, "blue");
   drawLine(0, 0, 100, 100, "yellow");
   drawText("Hello World", 8, 30, 22, "white");

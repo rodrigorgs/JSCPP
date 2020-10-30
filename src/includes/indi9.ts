@@ -20,6 +20,14 @@ export = {
         }
         rt.regFunc(_alo, "global", "alo", [], rt.voidTypeLiteral);
 
+        // TODO: how to return the key pressed (string)?
+        const _readKey = function(rt: CRuntime, _this: Variable) {
+            (<any>window).debuggerPromise = new Promise((resolve, reject) => {
+                window.addEventListener("keypress", (e) => resolve());
+            })
+        }
+        rt.regFunc(_readKey, "global", "readKey", [], rt.voidTypeLiteral);
+
         const _isKeyDown = function(rt: CRuntime, _this: Variable, key: ArrayVariable) {
             const keyValue = rt.getStringFromCharArray(key);
             const ret = keyState[keyValue] ? true : false;
