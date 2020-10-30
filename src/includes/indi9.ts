@@ -1,3 +1,4 @@
+import { IntVariable } from './../rt';
 import { CRuntime, Variable, ArrayVariable, FloatVariable } from '../rt';
 
 export = {
@@ -77,12 +78,17 @@ export = {
             } else {
                 var elem = document.createElement("img") as HTMLImageElement
                 elem.src = urlValue
+                elem.setAttribute("id", idValue);
                 elem.setAttribute("style", "display: none")
                 document.body.appendChild(elem)
             }
         }
         rt.regFunc(_loadImage, "global", "loadImage", [rt.normalPointerType(rt.charTypeLiteral), rt.normalPointerType(rt.charTypeLiteral)], rt.voidTypeLiteral)
 
+        const _delay = function(rt: CRuntime, _this: Variable, ms: IntVariable) {
+            (<any>window).debuggerPromise = new Promise(f => setTimeout(f, ms.v));
+        }
+        rt.regFunc(_delay, "global", "delay", [rt.intTypeLiteral], rt.voidTypeLiteral);
     }
 };
 

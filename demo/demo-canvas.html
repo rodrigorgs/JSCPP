@@ -22,21 +22,35 @@ window.onload = function () {
              '    drawImage("testImage", 200, 200);'+
              '    drawText("Hello World", 8, 30, 22, "white");'+
              '    loadImage("indigente", "http://indigente.github.io/images/logo-indigente.png");'+
-             '    drawImage("indigente", 300, 300);'+
+             '    delay(1000);'+
+             '    drawImage("indigente", 0, 0);'+
              "    return 0;"+
              "}"
   ;
-  var input = "4321";
-  var output = "";
-  var config = {
-    stdio: {
-      write: function(s) {
-        output += s;
+
+  
+  async function run(config) {
+    config = config || {};
+    if (!('stdio' in config)) {
+      config.stdio = {
+        write: function(s) {
+          console.log(s);
+        }
       }
     }
-  };
-  var exitCode = JSCPP.run(code, input, config);
-  console.log(output + "\nprogram exited with code " + exitCode);
+    config.debug = true;
+    let mydebugger = JSCPP.run(code, '', config);
+    let finished = false;
+    do {
+      window.debuggerPromise = undefined;
+      finished = mydebugger.next();
+      if (window.debuggerPromise) {
+        await window.debuggerPromise;
+      }
+    } while (finished == false);
+  }
+
+  run();
 }
 </script>
 </html>
