@@ -5,6 +5,11 @@ export = {
     load(rt: CRuntime) {
         const canvas = document.getElementById("gamecanvas") as HTMLCanvasElement;
         const ctx = canvas.getContext("2d");
+        const resourceRegistry = {
+            totalResources: 0,
+            loadedResources: 0,
+            promises: [] as Promise<unknown>[]
+        };
 
         const _alo = function(rt: CRuntime, _this: Variable) {
             window.alert("Alo mundo");
@@ -69,6 +74,11 @@ export = {
         }
         rt.regFunc(_drawText, "global", "drawText", [rt.normalPointerType(rt.charTypeLiteral), rt.doubleTypeLiteral, rt.doubleTypeLiteral, rt.doubleTypeLiteral, rt.normalPointerType(rt.charTypeLiteral)], rt.voidTypeLiteral)
 
+        const _waitUntilResourcesLoad = function (rt: CRuntime, _this: Variable) {
+            (<any>window).debuggerPromise = Promise.all(resourceRegistry.promises);
+        }
+        rt.regFunc(_waitUntilResourcesLoad, "global", "waitUntilResourcesLoad", [], rt.voidTypeLiteral)
+
         const _loadImage = function (rt: CRuntime, _this: Variable, id: ArrayVariable, url: ArrayVariable) {
             const idValue = rt.getStringFromCharArray(id)
             const urlValue = rt.getStringFromCharArray(url)
@@ -81,6 +91,17 @@ export = {
                 elem.setAttribute("id", idValue);
                 elem.setAttribute("style", "display: none")
                 document.body.appendChild(elem)
+
+                resourceRegistry.totalResources++;
+                resourceRegistry.promises.push(
+                    new Promise((resolve, reject) => {
+                        elem.onload = function () {
+                            resourceRegistry.loadedResources++;
+                            console.log("total: ", resourceRegistry.totalResources, " loaded: ", resourceRegistry.loadedResources);
+                            resolve();
+                        };
+                    })
+                )
             }
         }
         rt.regFunc(_loadImage, "global", "loadImage", [rt.normalPointerType(rt.charTypeLiteral), rt.normalPointerType(rt.charTypeLiteral)], rt.voidTypeLiteral)

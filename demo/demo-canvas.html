@@ -21,9 +21,12 @@ window.onload = function () {
              '    drawText("Hello World", 8, 30, 22, "white");'+
              '    loadImage("panda", "https://upload.wikimedia.org/wikipedia/commons/b/bf/Farm-Fresh_emotion_face_panda.png");'+
              '    loadImage("hero", "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Cc-by_new_white.svg/48px-Cc-by_new_white.svg.png");'+
-             '    delay(500);'+
+             '    waitUntilResourcesLoad();'+
              '    drawImage("panda", 110, 110);'+
              '    drawImage("hero", 150, 120);'+
+             '    loadImage("block", "https://upload.wikimedia.org/wikipedia/commons/d/d1/3D_icon_32x32.png");'+
+             '    waitUntilResourcesLoad();'+
+             '    drawImage("block", 180, 120);'+
              "    return 0;"+
              "}"
   ;
