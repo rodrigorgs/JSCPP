@@ -18,7 +18,7 @@ const includes: { [fileName: string]: IncludeModule } = {
     ctime: require("./includes/ctime"),
     iomanip: require("./includes/iomanip"),
     foo: require("./includes/dummy_class_foo"),
-    indi9: require("./includes/indi9")
+    inge9: require("./includes/inge9")
 };
 
 const headerAlias: { [filename: string]: string } = {

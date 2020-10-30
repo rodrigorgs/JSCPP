@@ -1,4 +1,4 @@
-import { IntVariable } from './../rt';
+import { IntVariable } from '../rt';
 import { CRuntime, Variable, ArrayVariable, FloatVariable } from '../rt';
 
 export = {
