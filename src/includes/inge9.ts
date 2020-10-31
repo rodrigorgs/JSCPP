@@ -13,7 +13,7 @@ export = {
 
         const keyState = {} as {[index: string]: boolean};
         window.addEventListener("keyup", (e: KeyboardEvent) => { keyState[e.key] = false; });
-        window.addEventListener("keydown", (e: KeyboardEvent) => { keyState[e.key] = true; });
+        window.addEventListener("keydown", (e: KeyboardEvent) => { if (!e.repeat) keyState[e.key] = true; });
 
         let lastKeyPressed: string = undefined;
 
@@ -63,6 +63,14 @@ export = {
             return rt.val(rt.boolTypeLiteral, ret);
         }
         rt.regFunc(_isKeyDown, "global", "isKeyDown", [rt.normalPointerType(rt.charTypeLiteral)], rt.boolTypeLiteral);
+
+        const _clearKey = function(rt: CRuntime, _this: Variable, key: ArrayVariable) {
+            const keyValue = rt.getStringFromCharArray(key);
+            if (keyState.hasOwnProperty(keyValue)) {
+                keyState[keyValue] = false;
+            }
+        }
+        rt.regFunc(_clearKey, "global", "clearKey", [rt.normalPointerType(rt.charTypeLiteral)], rt.voidTypeLiteral);
 
         const _fillRect = function (rt: CRuntime, _this: Variable, x: FloatVariable, y: FloatVariable, w: FloatVariable, h: FloatVariable, color: ArrayVariable) {
             const colorValue = rt.getStringFromCharArray(color)

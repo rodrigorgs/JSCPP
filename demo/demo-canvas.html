@@ -34,15 +34,20 @@ int main() {
   cout << "loaded all images" << endl;
 
   double x = 180, y = 120, delta = 4;
+  double heroy = 200;
   for (;;) {
     clear("black");
     if (isKeyDown("ArrowLeft")) x -= delta;
     if (isKeyDown("ArrowRight")) x += delta;
     if (isKeyDown("ArrowUp")) y -= delta;
     if (isKeyDown("ArrowDown")) y += delta;
+    if (isKeyDown(" ")) {
+      heroy += 5;
+      clearKey(" ");
+    }
   
     drawText(lastKey(), 8, 30, 22, "white");
-    drawImage("hero", 400, 200);
+    drawImage("hero", 400, heroy);
     drawImage("block", 400, 200);
     drawImage("panda", x, y);
     delay(30);
