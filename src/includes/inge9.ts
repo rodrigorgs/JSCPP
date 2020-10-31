@@ -12,10 +12,10 @@ export = {
         };
 
         const keyState = {} as {[index: string]: boolean};
-        window.addEventListener("keyup", (e: KeyboardEvent) => {
+        canvas.addEventListener("keyup", (e: KeyboardEvent) => {
             keyState[e.key] = false;
         });
-        window.addEventListener("keydown", (e: KeyboardEvent) => {
+        canvas.addEventListener("keydown", (e: KeyboardEvent) => {
             e.preventDefault();
             if (!e.repeat) {
                 keyState[e.key] = true;
@@ -31,7 +31,7 @@ export = {
 
         const _readKey = function(rt: CRuntime, _this: Variable) {
             (<any>window).debuggerPromise = new Promise((resolve, reject) => {
-                window.addEventListener("keydown", (e: KeyboardEvent) => {
+                canvas.addEventListener("keydown", (e: KeyboardEvent) => {
                     lastKeyPressed = e.key;
                     window.removeEventListener("keydown", this);
                     resolve()
