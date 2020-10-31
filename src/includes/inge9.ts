@@ -12,8 +12,15 @@ export = {
         };
 
         const keyState = {} as {[index: string]: boolean};
-        window.addEventListener("keyup", (e: KeyboardEvent) => { keyState[e.key] = false; });
-        window.addEventListener("keydown", (e: KeyboardEvent) => { if (!e.repeat) keyState[e.key] = true; });
+        window.addEventListener("keyup", (e: KeyboardEvent) => {
+            keyState[e.key] = false;
+        });
+        window.addEventListener("keydown", (e: KeyboardEvent) => {
+            e.preventDefault();
+            if (!e.repeat) {
+                keyState[e.key] = true;
+            }
+        });
 
         let lastKeyPressed: string = undefined;
 
