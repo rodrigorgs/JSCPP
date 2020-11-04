@@ -122,15 +122,25 @@ export = {
         }
         rt.regFunc(_drawImage, "global", "drawImage", [rt.normalPointerType(rt.charTypeLiteral), rt.doubleTypeLiteral, rt.doubleTypeLiteral], rt.voidTypeLiteral)
 
+        const doDrawText = function (text: string, x: number, y: number, size: number, color: string) {
+            ctx.fillStyle = color
+            ctx.font = "" + size + "px Arial"
+            ctx.fillText(text, x, y)
+        }
+
         const _drawText = function (rt: CRuntime, _this: Variable, text: ArrayVariable, x: FloatVariable, y: FloatVariable, size: FloatVariable, color: ArrayVariable) {
             const textValue = rt.getStringFromCharArray(text)
             const colorValue = rt.getStringFromCharArray(color)
-            
-            ctx.fillStyle = colorValue
-            ctx.font = "" + size.v + "px Arial"
-            ctx.fillText(textValue, x.v, y.v)
+            doDrawText(textValue, x.v, y.v, size.v, colorValue);
         }
         rt.regFunc(_drawText, "global", "drawText", [rt.normalPointerType(rt.charTypeLiteral), rt.doubleTypeLiteral, rt.doubleTypeLiteral, rt.doubleTypeLiteral, rt.normalPointerType(rt.charTypeLiteral)], rt.voidTypeLiteral)
+
+        const _drawTextDouble = function (rt: CRuntime, _this: Variable, text: IntVariable, x: FloatVariable, y: FloatVariable, size: FloatVariable, color: ArrayVariable) {
+            const textValue = "" + text.v;
+            const colorValue = rt.getStringFromCharArray(color)
+            doDrawText(textValue, x.v, y.v, size.v, colorValue);
+        }
+        rt.regFunc(_drawTextDouble, "global", "drawText", [rt.doubleTypeLiteral, rt.doubleTypeLiteral, rt.doubleTypeLiteral, rt.doubleTypeLiteral, rt.normalPointerType(rt.charTypeLiteral)], rt.voidTypeLiteral)
 
         const _waitUntilResourcesLoad = function (rt: CRuntime, _this: Variable) {
             (<any>window).debuggerPromise = Promise.all(resourceRegistry.promises);
