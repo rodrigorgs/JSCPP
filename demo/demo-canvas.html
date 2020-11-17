@@ -27,6 +27,7 @@ int main() {
   clear("black");
   drawText(lastKey(), 8, 30, 22, "white");
   
+  loadImage("tileset", "https://opengameart.org/sites/default/files/set_0.gif");
   loadImage("panda", "https://upload.wikimedia.org/wikipedia/commons/b/bf/Farm-Fresh_emotion_face_panda.png");
   loadImage("hero", "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Cc-by_new_white.svg/48px-Cc-by_new_white.svg.png");
   loadImage("block", "https://upload.wikimedia.org/wikipedia/commons/3/3d/8X8_GEOLOC.png");
@@ -35,6 +36,7 @@ int main() {
 
   double x = 180, y = 120, delta = 4;
   double heroy = 200;
+  int i = 0;
   for (;;) {
     clear("black");
     if (isKeyDown("ArrowLeft")) x -= delta;
@@ -47,6 +49,16 @@ int main() {
     }
   
     drawText(lastKey(), 8, 30, 22, "white");
+    
+    for (int x = 0; x < 3; x++) {
+      for (int y = 0; y < 3; y++) {
+        drawImageRect("tileset", 100 + 16 * x, 100 + 16 * y, x * 16, y * 16, 16, 16);
+      }
+    }
+
+    drawImageTile("tileset", 50, 50, 16, 16, i / 6);
+    i = (i + 1) % (256 * 6);
+    
     drawImage("hero", 400, heroy);
     drawImage("block", 400, 200);
     drawImage("panda", x, y);

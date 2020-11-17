@@ -122,6 +122,35 @@ export = {
         }
         rt.regFunc(_drawImage, "global", "drawImage", [rt.normalPointerType(rt.charTypeLiteral), rt.doubleTypeLiteral, rt.doubleTypeLiteral], rt.voidTypeLiteral)
 
+        const _drawImageRect = function (rt: CRuntime, _this: Variable, image: ArrayVariable, x: FloatVariable, y: FloatVariable, imgx: IntVariable, imgy: IntVariable, imgw: IntVariable, imgh: IntVariable) {
+            const imageValue = rt.getStringFromCharArray(image)
+            const imageElem = document.getElementById(imageValue) as CanvasImageSource;
+            if (imageElem) {
+                ctx.beginPath()
+                ctx.drawImage(imageElem, imgx.v, imgy.v, imgw.v, imgh.v, x.v, y.v, imgw.v, imgh.v);
+                ctx.fill()
+            } else {
+                console.error(`Image "${imageValue}" not found.`);
+            }
+        }
+        rt.regFunc(_drawImageRect, "global", "drawImageRect", [rt.normalPointerType(rt.charTypeLiteral), rt.doubleTypeLiteral, rt.doubleTypeLiteral, rt.intTypeLiteral, rt.intTypeLiteral, rt.intTypeLiteral, rt.intTypeLiteral], rt.voidTypeLiteral)
+
+        const _drawImageTile = function (rt: CRuntime, _this: Variable, image: ArrayVariable, x: FloatVariable, y: FloatVariable, imgw: IntVariable, imgh: IntVariable, tileid: IntVariable) {
+            const imageValue = rt.getStringFromCharArray(image)
+            const imageElem = document.getElementById(imageValue) as CanvasImageSource;
+            if (imageElem) {
+                const ncols = Math.floor(imageElem.width as number / imgw.v)
+                const imgy = Math.floor(tileid.v / ncols)
+                const imgx = tileid.v % ncols
+                ctx.beginPath()
+                ctx.drawImage(imageElem, imgx * imgw.v, imgy * imgh.v, imgw.v, imgh.v, x.v, y.v, imgw.v, imgh.v);
+                ctx.fill()
+            } else {
+                console.error(`Image "${imageValue}" not found.`);
+            }
+        }
+        rt.regFunc(_drawImageTile, "global", "drawImageTile", [rt.normalPointerType(rt.charTypeLiteral), rt.doubleTypeLiteral, rt.doubleTypeLiteral, rt.intTypeLiteral, rt.intTypeLiteral, rt.intTypeLiteral], rt.voidTypeLiteral)
+
         const doDrawText = function (text: string, x: number, y: number, size: number, color: string) {
             ctx.fillStyle = color
             ctx.font = "" + size + "px Arial"
