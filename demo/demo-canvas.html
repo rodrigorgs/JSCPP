@@ -26,6 +26,9 @@ int main() {
   readKey();
   clear("black");
   drawText(lastKey(), 8, 30, 22, "white");
+  if (lastKeyWas("Enter")) {
+    cout << "Enter" << endl;
+  }
   
   loadImage("tileset", "https://opengameart.org/sites/default/files/set_0.gif");
   loadImage("panda", "https://upload.wikimedia.org/wikipedia/commons/b/bf/Farm-Fresh_emotion_face_panda.png");

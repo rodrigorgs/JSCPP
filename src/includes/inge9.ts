@@ -45,6 +45,14 @@ export = {
         }
         rt.regFunc(_lastKey, "global", "lastKey", [], rt.normalPointerType(rt.charTypeLiteral));
 
+        const _lastKeyWas = function(rt: CRuntime, _this: Variable, key: ArrayVariable) {
+            // return rt.makeCharArrayFromString(lastKeyPressed);
+            const keyValue = rt.getStringFromCharArray(key);
+            const ret = lastKeyPressed == keyValue;
+            return rt.val(rt.boolTypeLiteral, ret);
+        }
+        rt.regFunc(_lastKeyWas, "global", "lastKeyWas", [rt.normalPointerType(rt.charTypeLiteral)], rt.boolTypeLiteral);
+
         const _canvasWidth = function(rt: CRuntime, _this: Variable) {
             return rt.val(rt.doubleTypeLiteral, canvas.width);
         }
