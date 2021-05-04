@@ -3,6 +3,9 @@ import { CRuntime, Variable, ArrayVariable, FloatVariable } from '../rt';
 
 export = {
     load(rt: CRuntime) {
+        // remove images
+        document.querySelectorAll("[data-inge9]").forEach(e => e.parentNode.removeChild(e));
+
         const canvas = document.getElementById("gamecanvas") as HTMLCanvasElement;
         const ctx = canvas.getContext("2d");
         const resourceRegistry = {
@@ -244,6 +247,7 @@ export = {
                 elem.src = urlValue
                 elem.setAttribute("id", idValue);
                 elem.setAttribute("style", "display: none")
+                elem.setAttribute("data-inge9", "true")
                 document.body.appendChild(elem)
 
                 resourceRegistry.totalResources++;
