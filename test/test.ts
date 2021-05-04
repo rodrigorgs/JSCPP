@@ -108,7 +108,7 @@ function doSample(code: string, input: string, expected: string, except: string,
         maxTimeout: 5000
     };
     try {
-        exitcode = JSCPP.run(code, input, config);
+        exitcode = JSCPP.run(code, input, config) as number;
     } catch (e) {
         if (except) {
             _it("expected exception", function () {
@@ -141,7 +141,7 @@ function doSample(code: string, input: string, expected: string, except: string,
     }
 };
 
-const tests = yaml.safeLoad(fs.readFileSync(testFolder + "test.yaml", "utf-8")) as { tests: { [testName: string]: TestCase } };
+const tests = yaml.load(fs.readFileSync(testFolder + "test.yaml", "utf-8")) as { tests: { [testName: string]: TestCase } };
 
 const todolist: Test[] = [];
 

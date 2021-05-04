@@ -462,8 +462,8 @@ export class CRuntime {
                         } else {
                             const argsStr = ts.map(v => {
                                 return this.makeTypeString(v);
-                            }).join(",");
-                            this.raiseException("no method " + name + " in " + lt + " accepts " + argsStr);
+                            }).join(", ");
+                            this.raiseException("no method " + name + " in " + this.makeTypeString(lt) + " accepts " + argsStr);
                         }
                     } else if (compatibles.length > 1) {
                         this.raiseException("ambiguous method invoking, " + compatibles.length + " compatible methods");
@@ -577,7 +577,12 @@ export class CRuntime {
             }
             const type = this.functionType(retType, args);
             if (lt === "global") {
-                this.defVar(name, type, this.val(type, this.makeFunctionPointerValue(null, name, lt, args, retType)));
+                this.defVar(name, type, this.val(type, {
+                    bindThis: null,
+                    defineType: lt,
+                    name,
+                    target: null
+                }));
             }
             t[name].functions[sig] = null;
             if (t[name].reg[sig] == null) {
@@ -628,19 +633,12 @@ export class CRuntime {
                         this.raiseException(name + " is already defined as " + this.makeTypeString(func.t));
                     }
                 } else {
-                    this.defVar(name, type, this.val(type, this.makeFunctionPointerValue({
-                        t: {
-                            type: "function",
-                            retType,
-                            signature: args,
-                        },
-                        v: {
-                            bindThis: null,
-                            defineType: lt,
-                            name,
-                            target: f
-                        }
-                    }, name, lt, args, retType)));
+                    this.defVar(name, type, this.val(type, {
+                        bindThis: null,
+                        defineType: lt,
+                        name,
+                        target: f
+                    }));
                 }
             }
             t[name].functions[sig] = f;
@@ -725,6 +723,9 @@ export class CRuntime {
     };
 
     defVar(varname: string, type: VariableType, initval: Variable) {
+        if (varname == null) {
+            this.raiseException("cannot define a variable without name");
+        }
         if (this.varAlreadyDefined(varname)) {
             this.raiseException("variable " + varname + " already defined");
         }
@@ -894,7 +895,7 @@ export class CRuntime {
                 return this.val(type, value.v ? 1 : 0);
             } else if (["float", "double"].includes(type.name)) {
                 if (!this.isNumericType(value)) {
-                    this.raiseException("cannot cast " + this.makeTypeString(value.t) + " to " + this.makeTypeString(type));
+                    this.raiseException("cannot cast " + this.makeValueString(value) + " to " + this.makeTypeString(type));
                 } else if (this.inrange(type, value.v, "overflow when casting " + this.makeTypeString(value.t) + " to " + this.makeTypeString(type))) {
                     value.v = this.ensureUnsigned(type, value.v);
                     return this.val(type, value.v);
@@ -902,7 +903,7 @@ export class CRuntime {
             } else {
                 if (type.name.slice(0, 8) === "unsigned") {
                     if (!this.isNumericType(value)) {
-                        this.raiseException("cannot cast " + this.makeTypeString(value.t) + " to " + this.makeTypeString(type));
+                        this.raiseException("cannot cast " + this.makeValueString(value) + " to " + this.makeTypeString(type));
                     } else if (value.v < 0) {
                         const { bytes } = this.config.limits[type.name];
                         let newValue = this.booleanToNumber(value.v) & ((1 << (8 * bytes)) - 1); // truncates
@@ -914,7 +915,7 @@ export class CRuntime {
                     }
                 }
                 if (!this.isNumericType(value)) {
-                    this.raiseException("cannot cast " + this.makeTypeString(value.t) + " to " + this.makeTypeString(type));
+                    this.raiseException("cannot cast " + this.makeValueString(value) + " to " + this.makeTypeString(type));
                 } else if (this.isFloatType(value)) {
                     v = value.v > 0 ? Math.floor(this.booleanToNumber(value.v)) : Math.ceil(this.booleanToNumber(value.v));
                     if (this.inrange(type, v, "overflow when casting " + this.makeValString(value) + " to " + this.makeTypeString(type))) {
@@ -954,7 +955,7 @@ export class CRuntime {
                             this.raiseException(this.makeTypeString(type.targetType) + " is not equal to " + this.makeTypeString(value.t.targetType));
                         }
                     } else {
-                        this.raiseException(this.makeTypeString(value.t) + " is not a normal porinter");
+                        this.raiseException(this.makeValueString(value) + " is not a normal porinter");
                     }
                 } else if (this.isArrayType(type)) {
                     if (this.isNormalPointerType(value)) {
@@ -964,7 +965,16 @@ export class CRuntime {
                             this.raiseException("array element type " + this.makeTypeString(type.eleType) + " is not equal to " + this.makeTypeString(value.t.targetType));
                         }
                     } else {
-                        this.raiseException(this.makeTypeString(value.t) + " is not a normal porinter");
+                        this.raiseException(this.makeValueString(value) + " is not a normal porinter");
+                    }
+                } else if (this.isFunctionPointerType(type)) {
+                    if (this.isFunctionPointerType(value.t)) {
+                        if (!this.isTypeEqualTo(type, value.t)) {
+                            this.raiseException("Function pointers do not share the same signature");
+                        }
+                        return value;
+                    } else {
+                        this.raiseException("cannot cast a regular/array pointer to a function pointer");
                     }
                 } else {
                     this.raiseException("cannot cast a function to a regular pointer");
@@ -1353,6 +1363,8 @@ export class CRuntime {
                 ret += "!" + this.getTypeSignature(type.targetType);
             } else if (type.ptrType === "array") {
                 ret += "!" + this.getTypeSignature(type.eleType);
+            } else if (type.ptrType === "function") {
+                ret += "@" + this.getTypeSignature(type.targetType);
             }
             ret += "}";
         } else if (type.type === "function") {
