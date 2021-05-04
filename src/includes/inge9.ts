@@ -30,7 +30,7 @@ export = {
         rt.regFunc(_alo, "global", "alo", [], rt.voidTypeLiteral);
 
         const _readKey = function(rt: CRuntime, _this: Variable) {
-            (<any>window).debuggerPromise = new Promise((resolve, reject) => {
+            (<any>window).debuggerPromise = new Promise<void>((resolve, reject) => {
                 canvas.addEventListener("keydown", (e: KeyboardEvent) => {
                     lastKeyPressed = e.key;
                     window.removeEventListener("keydown", this);
@@ -190,7 +190,7 @@ export = {
 
                 resourceRegistry.totalResources++;
                 resourceRegistry.promises.push(
-                    new Promise((resolve, reject) => {
+                    new Promise<void>((resolve, reject) => {
                         elem.onload = function () {
                             resourceRegistry.loadedResources++;
                             resolve();
