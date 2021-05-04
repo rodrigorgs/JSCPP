@@ -12,6 +12,26 @@ export = {
         };
 
         const keyState = {} as {[index: string]: boolean};
+        const mouseState = {x: 0, y: 0, left: false, right: false};
+
+        const mouseButtonStr = (n: number) => n == 0 ? "left" : (n == 2 ? "right" : undefined);
+        canvas.addEventListener("mousemove", (e: MouseEvent) => {
+            const rect = canvas.getBoundingClientRect();
+            mouseState.x = e.clientX - rect.left;
+            mouseState.y = e.clientY - rect.top;
+        });
+        canvas.addEventListener("mouseup", (e: MouseEvent) => {
+            const button = mouseButtonStr(e.button);
+            if (button) {
+                mouseState[button] = false;
+            }
+        });
+        canvas.addEventListener("mousedown", (e: MouseEvent) => {
+            const button = mouseButtonStr(e.button);
+            if (button) {
+                mouseState[button] = true;
+            }
+        });
         canvas.addEventListener("keyup", (e: KeyboardEvent) => {
             keyState[e.key] = false;
         });
@@ -28,6 +48,36 @@ export = {
             window.alert("Alo mundo");
         }
         rt.regFunc(_alo, "global", "alo", [], rt.voidTypeLiteral);
+
+        const _mouseX = function(rt: CRuntime, _this: Variable) {
+            return rt.val(rt.intTypeLiteral, mouseState.x);
+        }
+        rt.regFunc(_mouseX, "global", "mouseX", [], rt.intTypeLiteral);
+
+        const _mouseY = function(rt: CRuntime, _this: Variable) {
+            return rt.val(rt.intTypeLiteral, mouseState.y);
+        }
+        rt.regFunc(_mouseY, "global", "mouseY", [], rt.intTypeLiteral);
+
+        const _isMouseLeftButtonDown = function(rt: CRuntime, _this: Variable) {
+            return rt.val(rt.boolTypeLiteral, mouseState.left);
+        }
+        rt.regFunc(_isMouseLeftButtonDown, "global", "isMouseLeftButtonDown", [], rt.boolTypeLiteral);
+
+        const _isMouseRightButtonDown = function(rt: CRuntime, _this: Variable) {
+            return rt.val(rt.boolTypeLiteral, mouseState.right);
+        }
+        rt.regFunc(_isMouseRightButtonDown, "global", "isMouseRightButtonDown", [], rt.boolTypeLiteral);
+
+        const _clearMouseLeftButton = function(rt: CRuntime, _this: Variable) {
+            mouseState.left = false;
+        }
+        rt.regFunc(_clearMouseLeftButton, "global", "clearMouseLeftButton", [], rt.voidTypeLiteral);
+
+        const _clearMouseRightButton = function(rt: CRuntime, _this: Variable) {
+            mouseState.right = false;
+        }
+        rt.regFunc(_clearMouseRightButton, "global", "clearMouseRightButton", [], rt.voidTypeLiteral);
 
         const _readKey = function(rt: CRuntime, _this: Variable) {
             (<any>window).debuggerPromise = new Promise<void>((resolve, reject) => {
